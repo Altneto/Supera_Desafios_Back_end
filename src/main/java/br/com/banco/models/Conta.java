@@ -8,14 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Conta implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -27,4 +25,8 @@ public class Conta implements Serializable {
 	
 	@Column(name = "NOME_RESPONSAVEL", length = 50, nullable = false)
 	private String nomeResponsavel;
+	
+	public Conta(String nomeResponsavel) {
+		this.nomeResponsavel = nomeResponsavel;
+	}
 }

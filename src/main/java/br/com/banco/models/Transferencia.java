@@ -11,14 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Transferencia implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -46,4 +44,14 @@ public class Transferencia implements Serializable {
 	
 	@Column(name = "NOME_RESPONSAVEL")
 	private String nomeResponsavel;
+
+	public Transferencia(LocalDateTime dataTransferencia, Float valor, String tipo, String nomeOperadorTransacao,
+			Conta conta, String nomeResponsavel) {
+		this.dataTransferencia = dataTransferencia;
+		this.valor = valor;
+		this.tipo = tipo;
+		this.nomeOperadorTransacao = nomeOperadorTransacao;
+		this.conta = conta;
+		this.nomeResponsavel = nomeResponsavel;
+	}
 }
