@@ -1,6 +1,7 @@
 package br.com.banco.services;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,9 @@ import br.com.banco.models.Conta;
 import br.com.banco.models.Transferencia;
 import br.com.banco.repositories.ContaRepository;
 import br.com.banco.repositories.TransferenciaRepository;
-import br.com.banco.vo.TransferenciasComSaldoVO;
 import br.com.banco.vo.TransferenciaNovaVO;
 import br.com.banco.vo.TransferenciaVO;
+import br.com.banco.vo.TransferenciasComSaldoVO;
 
 @Service
 public class TransferenciaService {
@@ -39,7 +40,7 @@ public class TransferenciaService {
 		
 		
 		Transferencia transferencia = new Transferencia(
-				LocalDateTime.now(), 
+				ZonedDateTime.now(), 
 				vo.getValor(), 
 				vo.getTipo(), 
 				vo.getNomeOperadorTransacao(), 
@@ -49,7 +50,7 @@ public class TransferenciaService {
 		transferenciaRepository.save(transferencia);
 		
 		return new TransferenciaVO(transferencia.getId(), 
-				transferencia.getDataTransferencia(), 
+				transferencia.getDataTransferencia().toString(), 
 				transferencia.getValor(), 
 				transferencia.getTipo(), 
 				transferencia.getNomeOperadorTransacao());
@@ -135,7 +136,7 @@ public class TransferenciaService {
 	private TransferenciaVO transferenciaToVO (Transferencia transferencia) {
         return new TransferenciaVO(
         		transferencia.getId(),
-        		transferencia.getDataTransferencia(),
+        		transferencia.getDataTransferencia().toString(),
         		transferencia.getValor(),
         		transferencia.getTipo(),
         		transferencia.getNomeOperadorTransacao());

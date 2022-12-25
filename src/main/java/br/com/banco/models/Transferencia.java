@@ -1,7 +1,7 @@
 package br.com.banco.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +27,7 @@ public class Transferencia implements Serializable {
 	private Long id;
 	
 	@Column(name = "DATA_TRANSFERENCIA", nullable = false)
-	private LocalDateTime dataTransferencia;
+	private ZonedDateTime dataTransferencia;
 	
 	@Column(name = "VALOR", precision = 20, scale = 2, nullable = false)
 	private Float valor;
@@ -45,7 +45,7 @@ public class Transferencia implements Serializable {
 	@Column(name = "NOME_RESPONSAVEL")
 	private String nomeResponsavel;
 
-	public Transferencia(LocalDateTime dataTransferencia, Float valor, String tipo, String nomeOperadorTransacao,
+	public Transferencia(ZonedDateTime dataTransferencia, Float valor, String tipo, String nomeOperadorTransacao,
 			Conta conta, String nomeResponsavel) {
 		this.dataTransferencia = dataTransferencia;
 		this.valor = valor;
