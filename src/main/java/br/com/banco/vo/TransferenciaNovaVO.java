@@ -21,6 +21,4 @@ public class TransferenciaNovaVO {
 		this.idConta = idConta;
 		this.nomeResponsavel = nomeResponsavel;
 	}
-	
-	
 }

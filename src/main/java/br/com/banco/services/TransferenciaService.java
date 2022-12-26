@@ -1,13 +1,13 @@
 package br.com.banco.services;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +40,7 @@ public class TransferenciaService {
 		
 		
 		Transferencia transferencia = new Transferencia(
-				ZonedDateTime.now(), 
+				LocalDateTime.now(), 
 				vo.getValor(), 
 				vo.getTipo(), 
 				vo.getNomeOperadorTransacao(), 
@@ -68,11 +68,11 @@ public class TransferenciaService {
 		
 		PageRequest pageRequest = PageRequest.of(page, size);
         int length = transferenciaRepository.findAll().size();
-        Page<Transferencia> transferencias = new PageImpl<>(new ArrayList<>());
+        List<Transferencia> transferencias = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 		
 		if (dataInicio != "" && dataInicio != null && nomeDoOperador != "" && nomeDoOperador != null) {
 			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			dataDeInicio = LocalDateTime.parse(dataInicio, formatter);
 			
 			if (dataFim == "" && dataInicio != null) {
@@ -84,12 +84,10 @@ public class TransferenciaService {
 			transferencias = transferenciaRepository.search(
 	        		dataDeInicio, 
 	        		dataDeFim, 
-	        		nomeDoOperador, 
-	        		pageRequest);
+	        		nomeDoOperador);
 			
 		} else if (dataInicio != "" && dataInicio != null) {
 			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			dataDeInicio = LocalDateTime.parse(dataInicio, formatter);
 			
 			if (dataFim == "" && dataInicio != null) {
@@ -99,17 +97,15 @@ public class TransferenciaService {
 			dataDeFim = LocalDateTime.parse(dataFim, formatter);
 			
 			transferencias = transferenciaRepository.search1(
-	        		dataDeInicio, 
-	        		dataDeFim, 
-	        		pageRequest);
+					dataDeInicio, 
+					dataDeFim);
 			
 		} else if (nomeDoOperador != "" && nomeDoOperador != null) {
 			
 			transferencias = transferenciaRepository.search2(
-	        		nomeDoOperador,
-	        		pageRequest);						
+	        		nomeDoOperador);						
 		} else {
-			transferencias = transferenciaRepository.search3(pageRequest);
+			transferencias = transferenciaRepository.search3();
 		}
 		
         List<TransferenciaVO> vos = new ArrayList<>();
@@ -117,7 +113,11 @@ public class TransferenciaService {
             vos.add(transferenciaToVO(transferencia));
         }));
         
-        Page<TransferenciaVO> voPage = new PageImpl<>(vos, pageRequest, length);
+        PagedListHolder<TransferenciaVO> paged = new PagedListHolder<>(vos);
+        paged.setPageSize(size);
+        paged.setPage(page);
+        
+        Page<TransferenciaVO> voPage = new PageImpl<>(paged.getPageList(), pageRequest, length);
         
         
         return new TransferenciasComSaldoVO(voPage, saldoTotal(), saldoNoPeriodo(transferencias));
@@ -136,7 +136,7 @@ public class TransferenciaService {
 	private TransferenciaVO transferenciaToVO (Transferencia transferencia) {
         return new TransferenciaVO(
         		transferencia.getId(),
-        		transferencia.getDataTransferencia().toString(),
+        		transferencia.getDataTransferencia().toLocalDate().toString(),
         		transferencia.getValor(),
         		transferencia.getTipo(),
         		transferencia.getNomeOperadorTransacao());
@@ -153,7 +153,7 @@ public class TransferenciaService {
 		return saldoTotal;
 	}
 	
-	private Float saldoNoPeriodo(Page<Transferencia> transferencias) {
+	private Float saldoNoPeriodo(List<Transferencia> transferencias) {
 		Float saldoTotal = 0.0f;
 		
 		for (Transferencia transferencia : transferencias) {

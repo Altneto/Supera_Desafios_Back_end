@@ -13,11 +13,9 @@ public class TransferenciasComSaldoVO {
 	private Float saldoTotal;
 	private Float saldoPeriodo;
 	
-	public TransferenciasComSaldoVO(Page<TransferenciaVO> transferencias, Float saldoTotal, Float saldoPeriodo) {
-		this.transferencias = transferencias;
+	public TransferenciasComSaldoVO(Page<TransferenciaVO> voPage, Float saldoTotal, Float saldoPeriodo) {
+		this.transferencias = voPage;
 		this.saldoTotal = saldoTotal;
 		this.saldoPeriodo = saldoPeriodo;
 	}
-	
-	
 }

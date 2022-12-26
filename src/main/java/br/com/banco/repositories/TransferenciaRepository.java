@@ -1,9 +1,8 @@
 package br.com.banco.repositories;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,25 +16,22 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
 	@Query("Select t from Transferencia " + 
 	"t where t.dataTransferencia between :initialDate and :finalDate " + 
 			"and t.nomeOperadorTransacao like %:name%")
-	Page<Transferencia> search(
+	List<Transferencia> search(
             @Param("initialDate") LocalDateTime initialDate,
             @Param("finalDate") LocalDateTime finalDate,
-            @Param("name") String name,
-            Pageable pageable);
+            @Param("name") String name);
 	
 	@Query("Select t from Transferencia " + 
 			"t where t.dataTransferencia between :initialDate and :finalDate")
-	Page<Transferencia> search1(
+	List<Transferencia> search1(
 			@Param("initialDate") LocalDateTime initialDate,
-		    @Param("finalDate") LocalDateTime finalDate,
-		    Pageable pageable);
+		    @Param("finalDate") LocalDateTime finalDate);
 	
 	@Query("Select t from Transferencia " + 
 			"t where t.nomeOperadorTransacao like %:name%")
-	Page<Transferencia> search2(
-			@Param("name") String name,
-			Pageable pageable);
+	List<Transferencia> search2(
+			@Param("name") String name);
 	
 	@Query("Select t from Transferencia t")
-	Page<Transferencia> search3(Pageable pageable);
+	List<Transferencia> search3();
 }
